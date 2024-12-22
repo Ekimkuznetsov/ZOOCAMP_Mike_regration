@@ -14,9 +14,19 @@ lint:
 test:
 	PYTHONPATH=.:src pipenv run pytest tests
 
+# mlflow serwer start
+mlflow-server:
+	pipenv run mlflow server \
+	--backend-store-uri sqlite:///mlflow.db \
+	--default-artifact-root ./mlruns \
+	--host 0.0.0.0 \
+	--port 5000
+
 # Train model
 train:
-	pipenv run python src/model_training.py data/raw/train_bikes.csv models/random_forest_model.joblib
+	make mlflow-server &
+	pipenv run python src/model_training.py data/processed/train_bikes_processed.csv models/random_forest_model.joblib my-bucket random_forest_model.joblib
+
 
 # Process data
 preprocess:

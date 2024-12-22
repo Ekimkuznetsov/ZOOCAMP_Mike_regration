@@ -1,0 +1,29 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.0
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.2
+mlflow_version: 2.19.0
+model_size_bytes: 9917003
+model_uuid: 5c37305108ff49c5bf7441798b017e98
+run_id: 0f234037b008477ca773af22164c8961
+signature:
+  inputs: '[{"type": "integer", "name": "hour", "required": true}, {"type": "double",
+    "name": "temp", "required": true}, {"type": "double", "name": "humidity", "required":
+    true}, {"type": "double", "name": "windspeed", "required": true}, {"type": "double",
+    "name": "season", "required": true}, {"type": "double", "name": "weather", "required":
+    true}, {"type": "double", "name": "workingday", "required": true}, {"type": "long",
+    "name": "is_weekend", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2024-12-22 19:43:56.060863'

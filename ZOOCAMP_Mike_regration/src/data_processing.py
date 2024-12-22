@@ -36,12 +36,13 @@ def scale_features(data, feature_columns):
 def preprocess_data(data):
     data = process_datetime(data)
     data = encode_categorical(data)
-    feature_columns = ["temp", "atemp", "humidity", "windspeed"]
+    feature_columns = ["temp", "atemp", "humidity", "windspeed", "season", "weather", "workingday"]
     data = scale_features(data, feature_columns)
-    
-    # Зберігайте колонку datetime
+
+    # Зберігайте всі необхідні колонки
     required_columns = ["datetime", "casual", "count", "day", "month", "registered", "weekday", "year"] + feature_columns
     return data[required_columns]
+
 
 
 
