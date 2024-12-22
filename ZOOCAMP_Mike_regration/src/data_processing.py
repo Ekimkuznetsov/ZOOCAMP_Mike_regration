@@ -1,5 +1,6 @@
 import click
 import pandas as pd
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 
@@ -13,7 +14,7 @@ def process_datetime(data):
     data["weekday"] = data["datetime"].dt.weekday
     data["is_weekend"] = data["weekday"].apply(
         lambda x: 1 if x >= 5 else 0
-    )  # 1 for Saturday/Sunday
+    )
     return data
 
 
@@ -33,27 +34,39 @@ def scale_features(data, feature_columns):
 
 
 def preprocess_data(data):
-    """Complete preprocessing pipeline for data."""
     data = process_datetime(data)
     data = encode_categorical(data)
     feature_columns = ["temp", "atemp", "humidity", "windspeed"]
     data = scale_features(data, feature_columns)
-    return data
+    
+    # Зберігайте колонку datetime
+    required_columns = ["datetime", "casual", "count", "day", "month", "registered", "weekday", "year"] + feature_columns
+    return data[required_columns]
+
 
 
 @click.command()
 @click.argument("input_path")
-@click.argument("output_path")
-def process_data(input_path, output_path):
-    """CLI for data preprocessing."""
+@click.argument("train_output_path")
+@click.argument("test_output_path")
+@click.option("--test_size", default=0.2, help="Proportion of data to use as the test set.")
+def split_and_process_data(input_path, train_output_path, test_output_path, test_size):
+    """Load, preprocess, and split the data."""
     # Load data
     data = pd.read_csv(input_path)
+
     # Preprocess data
     processed_data = preprocess_data(data)
-    # Save data
-    processed_data.to_csv(output_path, index=False)
-    click.echo(f"Data processed and saved to {output_path}")
+
+    # Split data
+    train_data, test_data = train_test_split(processed_data, test_size=test_size, random_state=42)
+
+    # Save train and test data
+    train_data.to_csv(train_output_path, index=False)
+    test_data.to_csv(test_output_path, index=False)
+
+    click.echo(f"Data split and saved: train -> {train_output_path}, test -> {test_output_path}")
 
 
 if __name__ == "__main__":
-    process_data()
+    split_and_process_data()

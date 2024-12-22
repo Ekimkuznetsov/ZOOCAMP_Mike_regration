@@ -16,13 +16,23 @@ jobs:
           python-version: '3.9'
       - name: Install dependencies
         run: pip install pipenv && pipenv install --dev
+      - name: Run lint
+        run: make lint
       - name: Run tests
-        run: pipenv run pytest tests
-      - name: Lint code
-        run: pipenv run pylint src tests
+        run: make test
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy model to LocalStack
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install pipenv && pipenv install --dev
+      - name: Start LocalStack
         run: make localstack-up
+      - name: Deploy Monitoring
+        run: make monitor

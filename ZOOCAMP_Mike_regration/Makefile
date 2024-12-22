@@ -20,7 +20,8 @@ train:
 
 # Process data
 preprocess:
-	pipenv run python src/data_processing.py data/raw/train_bikes.csv data/processed/train_bikes_processed.csv
+	pipenv run python src/data_processing.py data/raw/train_bikes.csv data/processed/train_bikes_processed.csv data/processed/test_bikes_processed.csv
+
 
 # Start LocalStack
 localstack-up:
@@ -34,6 +35,6 @@ localstack-down:
 predict:
 	pipenv run python src/batch_prediction.py data/raw/test_bikes.csv predictions.csv --model_path models/random_forest_model.joblib
 
-# Generate monitoring report
-monitor:
-	pipenv run python monitoring/monitor_model.py data/processed/train_bikes_processed.csv predictions.csv monitoring/report.html
+# Monitoring
+monitor: preprocess
+	pipenv run python monitoring/monitor_model.py data/processed/train_bikes_processed.csv data/processed/test_bikes_processed.csv monitoring/report.html
