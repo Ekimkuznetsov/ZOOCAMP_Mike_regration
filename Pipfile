@@ -13,6 +13,10 @@ pylint = "*"
 pytest = "*"
 black = "*"
 aws = "*"
+awscli = "*"
+boto3 = "*"
+evidently = "*"
+mage-ai = "*"
 
 [dev-packages]
 ipykernel = "*"

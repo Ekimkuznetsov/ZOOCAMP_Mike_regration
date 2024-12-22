@@ -5,12 +5,11 @@ services:
     image: localstack/localstack
     container_name: localstack
     ports:
-      - "4566:4566"  # API Gateway endpoint
-      - "4572:4572"  # S3
+      - "4566:4566"
+      - "4572:4572"
     environment:
       - SERVICES=s3
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
+      - DATA_DIR=/var/lib/localstack/data
     volumes:
       - "./localstack:/var/lib/localstack"
-      - "/tmp/localstack:/tmp/localstack"
