@@ -18,7 +18,7 @@ jobs:
       - name: Verify Python version
         run: python --version
       - name: Install dependencies
-        run: pip install pipenv && pipenv --python $(which python) install --dev
+        run: pip install pipenv && pipenv sync --dev
       - name: Run lint
         run: make lint
       - name: Run tests

@@ -22,5 +22,11 @@ def test_preprocess_data():
         }
     )
     processed_data = preprocess_data(data)
-    assert "hour" in processed_data.columns
-    assert "is_weekend" in processed_data.columns
+    # Check for all expected columns
+    expected_columns = [
+        "datetime", "casual", "count", "registered", "weekday", "is_weekend",
+        "hour", "day", "month", "year", "temp", "atemp", "humidity", "windspeed"
+    ]
+    for col in expected_columns:
+        assert col in processed_data.columns, f"Missing column: {col}"
+

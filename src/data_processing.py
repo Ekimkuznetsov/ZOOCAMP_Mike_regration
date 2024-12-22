@@ -34,14 +34,19 @@ def scale_features(data, feature_columns):
 
 
 def preprocess_data(data):
+    """Complete preprocessing pipeline for data."""
+    # Add datetime features
     data = process_datetime(data)
+    # Encode categorical features
     data = encode_categorical(data)
-    feature_columns = ["temp", "atemp", "humidity", "windspeed", "season", "weather", "workingday"]
+    # Select features for scaling
+    feature_columns = ["temp", "atemp", "humidity", "windspeed", "hour", "day", "month", "year"]
     data = scale_features(data, feature_columns)
 
-    # Зберігайте всі необхідні колонки
-    required_columns = ["datetime", "casual", "count", "day", "month", "registered", "weekday", "year"] + feature_columns
+    # Define required columns for the final dataset
+    required_columns = ["datetime", "casual", "count", "registered", "weekday", "is_weekend"] + feature_columns
     return data[required_columns]
+
 
 
 
