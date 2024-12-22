@@ -34,7 +34,7 @@ jobs:
           python-version: '3.9'
           check-latest: true
       - name: Install dependencies
-        run: pip install pipenv && pipenv install --dev
+        run: pip install pipenv && pipenv --python $(which python) install --dev
       - name: Start LocalStack
         run: make localstack-up
       - name: Preprocess data
