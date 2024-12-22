@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a337a7bbffea4e87a06e759387cb0f8f/artifacts
+end_time: 1734732455560
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a337a7bbffea4e87a06e759387cb0f8f
+run_name: fun-bee-708
+run_uuid: a337a7bbffea4e87a06e759387cb0f8f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1734732450615
+status: 4
+tags: []
+user_id: codespace

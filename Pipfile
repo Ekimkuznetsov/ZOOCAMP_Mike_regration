@@ -4,11 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pandas = "*"
 matplotlib = "*"
 seaborn = "*"
-scikit-learn = "==1.2.0"
 mlflow = "*"
+pandas = "*"
+scikit-learn = "==1.5.2"
+pylint = "*"
+pytest = "*"
+black = "*"
+aws = "*"
 
 [dev-packages]
 ipykernel = "*"

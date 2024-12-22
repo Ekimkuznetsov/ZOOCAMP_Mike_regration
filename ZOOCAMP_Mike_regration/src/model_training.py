@@ -1,11 +1,13 @@
+import click
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
-from data_processing import preprocess_data
 import numpy as np
 import mlflow
 import mlflow.sklearn
+import joblib
+from mlflow.models.signature import infer_signature
 
 def train_random_forest_with_mlflow(train_path):
     """Train and log a Random Forest model with MLflow."""
@@ -15,11 +17,12 @@ def train_random_forest_with_mlflow(train_path):
     with mlflow.start_run():
         # Load and preprocess training data
         train_data = pd.read_csv(train_path)
-        train_data = preprocess_data(train_data)
+        # Example of feature engineering
+        train_data['hour'] = pd.to_datetime(train_data['datetime']).dt.hour
+        train_data['is_weekend'] = (pd.to_datetime(train_data['datetime']).dt.weekday >= 5).astype(int)
         
         # Define features and target
-        features = ['hour', 'temp', 'humidity', 'windspeed', 'season', 'weather', 
-                    'workingday', 'weekday', 'is_weekend', 'month']
+        features = ['hour', 'temp', 'humidity', 'windspeed', 'season', 'weather', 'workingday', 'is_weekend']
         X = train_data[features]
         y = train_data['count']
         
@@ -40,14 +43,34 @@ def train_random_forest_with_mlflow(train_path):
         
         print(f"Random Forest Model Performance:\nRMSE: {rmse}\nR²: {r2}")
         
+        # Infer the signature
+        signature = infer_signature(X_train, model.predict(X_train))
+        input_example = X_train.head(1)
+        
         # Log metrics manually (optional, since autolog does this too)
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("r2", r2)
         
-        # Save the model
-        mlflow.sklearn.log_model(model, "random_forest_model")
+        # Save the model with signature and input example
+        mlflow.sklearn.log_model(model, "random_forest_model", signature=signature, input_example=input_example)
         
     return model
 
+
+@click.command()
+@click.argument('train_path')
+@click.argument('output_model_path')
+def train_model(train_path, output_model_path):
+    """
+    CLI for training the model.
+    Arguments:
+    - train_path: Path to the training data.
+    - output_model_path: Path to save the trained model.
+    """
+    model = train_random_forest_with_mlflow(train_path)
+    joblib.dump(model, output_model_path)
+    click.echo(f"Model trained and saved to {output_model_path}")
+
+
 if __name__ == "__main__":
-    train_random_forest_with_mlflow("./data/raw/train_bikes.csv")
+    train_model()

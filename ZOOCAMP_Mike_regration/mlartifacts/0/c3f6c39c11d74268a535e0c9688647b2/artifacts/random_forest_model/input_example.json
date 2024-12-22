@@ -1,0 +1,1 @@
+{"columns": ["hour", "temp", "humidity", "windspeed", "season", "weather", "workingday", "is_weekend"], "data": [[5, 27.88, 83, 6.0032, 3, 1, 1, 0]]}

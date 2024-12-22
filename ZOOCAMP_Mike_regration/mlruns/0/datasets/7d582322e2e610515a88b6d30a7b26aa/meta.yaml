@@ -1,0 +1,14 @@
+digest: 4df0be23
+name: dataset
+profile: '{"num_rows": 8708, "num_elements": 87080}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "hour", "required": true},
+  {"type": "double", "name": "temp", "required": true}, {"type": "double", "name":
+  "humidity", "required": true}, {"type": "double", "name": "windspeed", "required":
+  true}, {"type": "double", "name": "season", "required": true}, {"type": "double",
+  "name": "weather", "required": true}, {"type": "double", "name": "workingday", "required":
+  true}, {"type": "double", "name": "weekday", "required": true}, {"type": "double",
+  "name": "is_weekend", "required": true}, {"type": "double", "name": "month", "required":
+  true}]}'
+source: '{"tags": {"mlflow.user": "codespace", "mlflow.source.name": "src/model_training.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "cc0efd27a6fffddf4fb08c2e73001dc710dcc422"}}'
+source_type: code

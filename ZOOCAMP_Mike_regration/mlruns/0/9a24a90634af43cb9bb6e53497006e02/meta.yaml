@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/9a24a90634af43cb9bb6e53497006e02/artifacts
+end_time: 1734732555571
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9a24a90634af43cb9bb6e53497006e02
+run_name: zealous-crane-324
+run_uuid: 9a24a90634af43cb9bb6e53497006e02
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1734732551066
+status: 4
+tags: []
+user_id: codespace

@@ -1,3 +1,4 @@
+import click
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
@@ -26,10 +27,25 @@ def scale_features(data, feature_columns):
     data[feature_columns] = scaler.fit_transform(data[feature_columns])
     return data
 
-def preprocess_data(data):
-    """Full preprocessing pipeline."""
-    data = process_datetime(data)
-    data = encode_categorical(data)
-    numeric_features = ['temp', 'atemp', 'humidity', 'windspeed']
-    data = scale_features(data, numeric_features)
-    return data
+
+
+@click.command()
+@click.argument('input_path')
+@click.argument('output_path')
+def process_data(input_path, output_path):
+    """CLI for data preprocessing."""
+    import pandas as pd
+    from src.data_processing import preprocess_data
+    
+    # Load data
+    data = pd.read_csv(input_path)
+    # Preprocess data
+    processed_data = preprocess_data(data)
+    # Save data
+    processed_data.to_csv(output_path, index=False)
+    click.echo(f"Data processed and saved to {output_path}")
+
+if __name__ == "__main__":
+    process_data()
+
+

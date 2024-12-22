@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1f724e8e79474f3a9dc64905fea77a61/artifacts
+end_time: 1734732614196
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1f724e8e79474f3a9dc64905fea77a61
+run_name: welcoming-crow-976
+run_uuid: 1f724e8e79474f3a9dc64905fea77a61
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1734732609551
+status: 4
+tags: []
+user_id: codespace

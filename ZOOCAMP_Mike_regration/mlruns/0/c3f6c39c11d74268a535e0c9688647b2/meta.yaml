@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/c3f6c39c11d74268a535e0c9688647b2/artifacts
+end_time: 1734875413302
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c3f6c39c11d74268a535e0c9688647b2
+run_name: glamorous-shoat-373
+run_uuid: c3f6c39c11d74268a535e0c9688647b2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1734875405895
+status: 3
+tags: []
+user_id: codespace

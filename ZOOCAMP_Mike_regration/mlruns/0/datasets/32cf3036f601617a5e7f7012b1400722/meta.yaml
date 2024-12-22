@@ -1,0 +1,12 @@
+digest: 95bc600f
+name: dataset
+profile: '{"num_rows": 8708, "num_elements": 69664}'
+schema: '{"mlflow_colspec": [{"type": "integer", "name": "hour", "required": true},
+  {"type": "double", "name": "temp", "required": true}, {"type": "long", "name": "humidity",
+  "required": true}, {"type": "double", "name": "windspeed", "required": true}, {"type":
+  "long", "name": "season", "required": true}, {"type": "long", "name": "weather",
+  "required": true}, {"type": "long", "name": "workingday", "required": true}, {"type":
+  "long", "name": "is_weekend", "required": true}]}'
+source: '{"tags": {"mlflow.user": "codespace", "mlflow.source.name": "src/model_training.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "cc0efd27a6fffddf4fb08c2e73001dc710dcc422"}}'
+source_type: code
