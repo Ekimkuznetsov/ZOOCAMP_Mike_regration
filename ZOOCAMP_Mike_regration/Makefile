@@ -8,11 +8,11 @@ format:
 
 # Lint code
 lint:
-	PYTHONPATH=.:src pipenv run pylint src tests
+	pipenv run pylint src tests
 
 # Run tests
 test:
-	PYTHONPATH=.:src pipenv run pytest tests
+	pipenv run pytest tests
 
 # mlflow serwer start
 mlflow-server:
