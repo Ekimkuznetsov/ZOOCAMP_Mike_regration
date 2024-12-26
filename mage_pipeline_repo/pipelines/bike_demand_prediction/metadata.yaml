@@ -1,0 +1,48 @@
+blocks:
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - data_processing
+  name: data_ingestion
+  status: not_executed
+  type: data_loader
+  upstream_blocks: []
+  uuid: data_ingestion
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - model_training
+  name: data_processing
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - data_ingestion
+  uuid: data_processing
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - batch_prediction
+  name: model_training
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - data_processing
+  uuid: model_training
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - monitoring
+  name: batch_prediction
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - model_training
+  uuid: batch_prediction
+- all_upstream_blocks_executed: true
+  downstream_blocks: []
+  name: monitoring
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - batch_prediction
+  uuid: monitoring
+name: bike_demand_prediction
+type: python
+uuid: bike_demand_prediction
+widgets: []

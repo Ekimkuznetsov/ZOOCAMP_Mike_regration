@@ -1,45 +1,40 @@
-# Install dependencies
-install:
-	pipenv install --dev
+# Makefile for Bike Demand Prediction Pipeline
 
-# Format code
-format:
-	pipenv run black src tests
+# Variables
+PIPELINE_PATH = mage_pipeline_repo/pipelines/bike_demand_prediction
+TESTS_PATH = tests
+PYTHON = python3
 
-# Lint code
-lint:
-	PATH=$(pipenv --venv)/bin:$(PATH) pipenv run pylint src tests || exit 0
+.PHONY: all start_mage preprocess train predict monitor
 
-# Run tests
-test:
-	PYTHONPATH=$(shell pwd) PATH=$(pipenv --venv)/bin:$(PATH) pipenv run pytest tests
+# Start Mage
+start_mage:
+	mage start $(MAGE_PATH)
+
+# Run all tests
+test_all:
+	$(PYTHON) -m unittest discover $(TESTS_PATH)
+
+# Run unit tests
+test_unit:
+	$(PYTHON) -m unittest discover -s $(TESTS_PATH)/unit -p "*.py"
 
 
-# mlflow server start
-mlflow-server:
-	docker-compose -f docker/docker-compose.yaml up -d mlflow
-
-# Train model
-train: mlflow-server
-	sleep 5 # даємо час на старт сервера MLflow
-	pipenv run python src/model_training.py data/processed/train_bikes_processed.csv models/random_forest_model.joblib my-bucket random_forest_model.joblib
-
-# Process data
+# Data processing
 preprocess:
-	pipenv run python src/data_processing.py data/raw/train_bikes.csv data/processed/train_bikes_processed.csv data/processed/test_bikes_processed.csv
+	$(PYTHON) $(PIPELINE_PATH)/data_ingestion.py
 
-# Start LocalStack
-localstack-up:
-	docker-compose -f docker/docker-compose.yaml up -d localstack
+# Model training
+train:
+	$(PYTHON) -c "from mage_pipeline_repo.pipelines.bike_demand_prediction import model_training; model_training()"
 
-# Stop LocalStack
-localstack-down:
-	docker-compose -f docker/docker-compose.yaml down
-
-# Predict on test data
+# Batch prediction
 predict:
-	pipenv run python src/batch_prediction.py data/raw/test_bikes.csv predictions.csv --model_path models/random_forest_model.joblib
+	$(PYTHON) -c "from mage_pipeline_repo.pipelines.bike_demand_prediction import batch_prediction; batch_prediction()"
 
 # Monitoring
-monitor: preprocess
-	pipenv run python monitoring/monitor_model.py data/processed/train_bikes_processed.csv data/processed/test_bikes_processed.csv monitoring/report.html
+monitor:
+	$(PYTHON) -c "from mage_pipeline_repo.pipelines.bike_demand_prediction import monitoring; monitoring()"
+
+# Full pipeline execution
+all: preprocess train predict monitor

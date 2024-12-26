@@ -15,6 +15,7 @@ aws = "*"
 awscli = "*"
 boto3 = "*"
 evidently = "*"
+mage = "*"
 mage-ai = "*"
 
 [dev-packages]
