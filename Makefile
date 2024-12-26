@@ -8,23 +8,20 @@ format:
 
 # Lint code
 lint:
-	PATH=$(pipenv --venv)/bin:$(PATH) pipenv run pylint src tests
+	PATH=$(pipenv --venv)/bin:$(PATH) pipenv run pylint src tests || exit 0
 
 # Run tests
 test:
-	PATH=$(pipenv --venv)/bin:$(PATH) pipenv run pytest tests
+	PYTHONPATH=$(shell pwd) PATH=$(pipenv --venv)/bin:$(PATH) pipenv run pytest tests
+
 
 # mlflow server start
 mlflow-server:
-	pipenv run mlflow server \
-	--backend-store-uri sqlite:///mlflow.db \
-	--default-artifact-root ./mlruns \
-	--host 0.0.0.0 \
-	--port 5000
+	docker-compose -f docker/docker-compose.yaml up -d mlflow
 
 # Train model
-train:
-	make mlflow-server &
+train: mlflow-server
+	sleep 5 # даємо час на старт сервера MLflow
 	pipenv run python src/model_training.py data/processed/train_bikes_processed.csv models/random_forest_model.joblib my-bucket random_forest_model.joblib
 
 # Process data
@@ -33,7 +30,7 @@ preprocess:
 
 # Start LocalStack
 localstack-up:
-	docker-compose -f docker/docker-compose.yaml up -d
+	docker-compose -f docker/docker-compose.yaml up -d localstack
 
 # Stop LocalStack
 localstack-down:

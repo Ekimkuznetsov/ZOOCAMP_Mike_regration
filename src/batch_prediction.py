@@ -1,33 +1,45 @@
+"""
+Batch prediction module for bike demand forecasting.
+
+This script provides a CLI for generating predictions on new data using
+a pre-trained machine learning model. It supports loading models from both
+local storage and S3.
+"""
+
 import click
 import pandas as pd
 import joblib
 import boto3
+from src.config import FEATURE_COLUMNS  # Import common feature list
 
 
 def load_model_from_s3(bucket_name, s3_key, local_model_path):
-    """Download the model from S3 and load it."""
+    """
+    Download the model from S3 and load it.
+
+    :param bucket_name: Name of the S3 bucket.
+    :param s3_key: Key of the model file in S3.
+    :param local_model_path: Local path to save the model file.
+    :return: Loaded model.
+    """
     s3 = boto3.client("s3", endpoint_url="http://localhost:4566")
     s3.download_file(bucket_name, s3_key, local_model_path)
     return joblib.load(local_model_path)
 
 
 def preprocess_data(data):
-    """Apply feature engineering to the data."""
+    """
+    Apply feature engineering to the input data.
+
+    :param data: DataFrame with raw input data.
+    :return: DataFrame with processed features.
+    """
     data["hour"] = pd.to_datetime(data["datetime"]).dt.hour
     data["is_weekend"] = (pd.to_datetime(data["datetime"]).dt.weekday >= 5).astype(int)
-    features = [
-        "hour",
-        "temp",
-        "humidity",
-        "windspeed",
-        "season",
-        "weather",
-        "workingday",
-        "is_weekend",
-    ]
-    return data[features]
+    return data[FEATURE_COLUMNS]  # Use the imported feature list
 
 
+# pylint: disable=E1120
 @click.command()
 @click.argument("input_path")
 @click.argument("output_path")
@@ -43,9 +55,6 @@ def preprocess_data(data):
 def predict(input_path, output_path, model_path, bucket_name, s3_key):
     """
     CLI for batch prediction.
-    Arguments:
-    - input_path: Path to the input data file (CSV).
-    - output_path: Path to save the predictions (CSV).
     """
     # Load model
     if bucket_name and s3_key:
@@ -54,17 +63,17 @@ def predict(input_path, output_path, model_path, bucket_name, s3_key):
         model = joblib.load(model_path)
 
     # Load data
-    data = pd.read_csv(input_path)
+    input_data = pd.read_csv(input_path)
 
     # Preprocess data
-    X = preprocess_data(data)
+    features = preprocess_data(input_data)
 
     # Predict
-    predictions = model.predict(X)
-    data["predictions"] = predictions
+    predictions = model.predict(features)
+    input_data["predictions"] = predictions
 
     # Save predictions
-    data.to_csv(output_path, index=False)
+    input_data.to_csv(output_path, index=False)
     click.echo(f"Predictions saved to {output_path}")
 
 

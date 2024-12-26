@@ -12,4 +12,15 @@ services:
       - DEBUG=1
       - DATA_DIR=/var/lib/localstack/data
     volumes:
-      - "./localstack:/var/lib/localstack"
+      - "./docker/localstack:/var/lib/localstack"
+
+  mlflow:
+    image: bitnami/mlflow:latest
+    container_name: mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./mlruns:/opt/bitnami/mlflow/mlruns"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db
+      - MLFLOW_ARTIFACT_ROOT=/opt/bitnami/mlflow/mlruns

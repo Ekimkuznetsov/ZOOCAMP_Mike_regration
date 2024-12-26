@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 matplotlib = "*"
 seaborn = "*"
-mlflow = "*"
 pandas = "*"
 scikit-learn = "==1.5.2"
 pylint = "*"
