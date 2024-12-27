@@ -1,0 +1,108 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - data_processing
+  executor_config: null
+  executor_type: local_python
+  has_callback: null
+  language: python
+  name: data_ingestion
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: data_ingestion
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - model_training
+  executor_config: null
+  executor_type: local_python
+  has_callback: null
+  language: python
+  name: data_processing
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - data_ingestion
+  uuid: data_processing
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - batch_prediction
+  executor_config: null
+  executor_type: local_python
+  has_callback: null
+  language: python
+  name: model_training
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - data_processing
+  uuid: model_training
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - monitoring
+  executor_config: null
+  executor_type: local_python
+  has_callback: null
+  language: python
+  name: batch_prediction
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - model_training
+  uuid: batch_prediction
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: null
+  language: python
+  name: monitoring
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - batch_prediction
+  uuid: monitoring
+cache_block_output_in_memory: false
+callbacks: []
+concurrency_config: {}
+conditionals: []
+created_at: null
+data_integration: null
+description: null
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
+name: bike_demand_prediction
+notification_config: {}
+remote_variables_dir: null
+retry_config: {}
+run_pipeline_in_one_process: false
+settings:
+  triggers: null
+spark_config: {}
+tags: []
+type: python
+uuid: bike_demand_prediction
+variables_dir: /home/codespace/.mage_data/bike_demand_prediction
+widgets: []

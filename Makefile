@@ -11,14 +11,14 @@ PYTHON = python3
 start_mage:
 	mage start $(MAGE_PATH)
 
-# Run all tests
-test_all:
-	$(PYTHON) -m unittest discover $(TESTS_PATH)
-
 # Run unit tests
 test_unit:
-	$(PYTHON) -m unittest discover -s $(TESTS_PATH)/unit -p "*.py"
+	PYTHONPATH=. python3 -m unittest discover -s tests/unit -p "test_*.py"
 
+
+# Data processing
+process:
+	python3 mage_pipeline_repo/pipelines/bike_demand_prediction/data_processing.py
 
 # Data processing
 preprocess:
@@ -26,15 +26,19 @@ preprocess:
 
 # Model training
 train:
-	$(PYTHON) -c "from mage_pipeline_repo.pipelines.bike_demand_prediction import model_training; model_training()"
+	python3 mage_pipeline_repo/pipelines/bike_demand_prediction/model_training.py
+
+mlflow_server:
+	mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 0.0.0.0 --port 5000
+
 
 # Batch prediction
 predict:
-	$(PYTHON) -c "from mage_pipeline_repo.pipelines.bike_demand_prediction import batch_prediction; batch_prediction()"
+	python3 mage_pipeline_repo/pipelines/bike_demand_prediction/batch_prediction.py
 
 # Monitoring
 monitor:
-	$(PYTHON) -c "from mage_pipeline_repo.pipelines.bike_demand_prediction import monitoring; monitoring()"
+	python3 mage_pipeline_repo/pipelines/bike_demand_prediction/monitoring.py
 
 # Full pipeline execution
 all: preprocess train predict monitor
