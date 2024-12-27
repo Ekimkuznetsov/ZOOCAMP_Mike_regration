@@ -2,14 +2,18 @@
 Data ingestion block for bike demand prediction.
 """
 
+from mage_ai.data_preparation.decorators import data_loader
 import pandas as pd
 import os
 
 RAW_DATA_PATH = 'data/raw'
 PROCESSED_DATA_PATH = 'data/processed'
 
-def execute(**kwargs):
-    """Load raw data and save the processed data."""
+@data_loader
+def load_data(*args, **kwargs):
+    """
+    Load raw data and save the processed data.
+    """
     try:
         print("Starting data ingestion...")
 
@@ -48,7 +52,3 @@ def execute(**kwargs):
     except Exception as e:
         print(f"An error occurred during data ingestion: {e}")
         raise
-
-
-if __name__ == "__main__":
-    execute()

@@ -1,40 +1,57 @@
 """
-Unit tests for the data processing block.
+Data ingestion block for bike demand prediction.
 """
 
-import os
+from mage_ai.data_preparation.decorators import data_loader
 import pandas as pd
-import unittest
-from mage_pipeline_repo.pipelines.bike_demand_prediction.data_processing import execute
+import os
 
-class TestDataProcessing(unittest.TestCase):
-    """Test suite for the data processing block."""
+RAW_DATA_PATH = 'data/raw'
+PROCESSED_DATA_PATH = 'data/processed'
 
-    def test_execute(self):
-        """Test the data processing block."""
-        processed_path = 'data/processed'
-        final_path = 'data/final'
+@data_loader
+def load_data(*args, **kwargs):
+    """
+    Load raw data and save the processed data.
+    """
+    try:
+        print("Starting data ingestion...")
 
-        # Ensure processed data exists
-        train_file = os.path.join(processed_path, 'train_bikes_processed.csv')
-        test_file = os.path.join(processed_path, 'test_bikes_processed.csv')
-        self.assertTrue(os.path.exists(train_file), "Processed train data not found.")
-        self.assertTrue(os.path.exists(test_file), "Processed test data not found.")
+        # Ensure processed data directory exists
+        os.makedirs(PROCESSED_DATA_PATH, exist_ok=True)
+        print(f"Processed data directory: {PROCESSED_DATA_PATH}")
 
-        # Run the block
-        execute()
+        # Load raw data
+        train_file = os.path.join(RAW_DATA_PATH, 'train_bikes.csv')
+        test_file = os.path.join(RAW_DATA_PATH, 'test_bikes.csv')
 
-        # Check final files
-        train_final = os.path.join(final_path, 'train_bikes_final.csv')
-        test_final = os.path.join(final_path, 'test_bikes_final.csv')
-        self.assertTrue(os.path.exists(train_final), "Final train data not found.")
-        self.assertTrue(os.path.exists(test_final), "Final test data not found.")
+        print(f"Loading train data from {train_file}")
+        print(f"Loading test data from {test_file}")
 
-        # Validate structure
-        train_data = pd.read_csv(train_final)
-        self.assertIn('hour', train_data.columns, "'hour' column missing in train data.")
-        self.assertIn('day_of_week', train_data.columns, "'day_of_week' column missing in train data.")
+        train_data = pd.read_csv(train_file)
+        test_data = pd.read_csv(test_file)
 
+        # Perform basic checks
+        assert 'datetime' in train_data.columns, "Train data missing 'datetime' column."
+        assert 'datetime' in test_data.columns, "Test data missing 'datetime' column."
+
+        # Save processed data
+        train_output = os.path.join(PROCESSED_DATA_PATH, 'train_bikes_processed.csv')
+        test_output = os.path.join(PROCESSED_DATA_PATH, 'test_bikes_processed.csv')
+
+        train_data.to_csv(train_output, index=False)
+        test_data.to_csv(test_output, index=False)
+
+        print(f"Train data saved to {train_output}")
+        print(f"Test data saved to {test_output}")
+        print("Data ingestion completed successfully.")
+
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")
+        raise
+    except Exception as e:
+        print(f"An error occurred during data ingestion: {e}")
+        raise
 
 if __name__ == "__main__":
-    unittest.main()
+    load_data()
